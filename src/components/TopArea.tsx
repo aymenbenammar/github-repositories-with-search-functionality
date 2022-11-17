@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { TopAreaProps, UserProps } from "../types/user";
 import { joinedDate } from "../utils/formatter";
-
+import { queryUser } from "../graphql/queries";
+import {useQuery} from "@apollo/client"
 export const TopArea = ({ setUser }: TopAreaProps) => {
   const { changeTheme, lightMode } = useContext(ThemeContext);
   const [empty, setEmpty] = useState<boolean>(false);
@@ -29,15 +30,26 @@ export const TopArea = ({ setUser }: TopAreaProps) => {
   async function fetchUser(username: string) {
     const response = await fetch(`https://api.github.com/users/${username}`);
     const data = await response.json();
+//   const {loading , error , data} = useQuery(queryUser,
+   
+//      {variables: {
+//     "login": username,
+//     "size": 100,
+//     "privacy": "PUBLIC"
+//   },
+//     context:
+//      { headers: { authorization: `Bearer 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` } 
+//     }
 
- 
+// },)
+//  console.log(data)
 
 
-    if (response.status != 200) {
-      setNotFound(true);
-      setUser(null);
-      return;
-    }
+    // if (response.status != 200) {
+    //   setNotFound(true);
+    //   setUser(null);
+    //   return;
+    // }
 
     setNotFound(false);
 

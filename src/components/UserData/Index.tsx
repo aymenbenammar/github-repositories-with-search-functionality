@@ -6,17 +6,40 @@ import { UserDataProps } from "../../types/user";
 import { useEffect, useState } from "react";
 import axios from 'axios'
 import { RepoArea } from "./RepoArea";
+import {useQuery} from "@apollo/client"
+import {queryUser , queryRepos} from "../../graphql/queries"
 
 
-export const Index = ({ user }: UserDataProps) => {
+export const Index = ({ user  }: UserDataProps) => {
+  const [repos,setRepos]= useState([]);
+  const[graph,setGraph]=useState([]);
+  const {loading , error , data} = useQuery(queryRepos,
+   
+    {variables: {
+      "first": 1,
+      "privacy": "PUBLIC",
+      "login": user.username,
+      "repositoriesFirst2": 100
+ },
+   context:
+    { headers: { authorization: `Bearer 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` } 
+   }
+
+},
+
+
+  
+   )
+  console.log(data)
   const [username,setUsername]=useState('')
   const [filter,setFilter]=useState('');
-const [repos,setRepos]= useState([]);
+
 if(username!==user.username){
 setUsername(user.username);
 setRepos([])
 }
 useEffect(()=>{
+  //console.log(data)
   if (repos.length==0)
  axios.get('https://api.github.com/users/'+user.username+'/repos')
   .then(res=>{
@@ -33,7 +56,7 @@ useEffect(()=>{
 
 
 )
-
+if (loading) return 'Loading...';
   return (
     <Container>
      
@@ -74,14 +97,14 @@ useEffect(()=>{
       </InputArea>
       <ReposList>
       {
-        repos.filter((repo)=>{
-          return filter.toLowerCase()===''? repo : repo.name.toLowerCase().includes(filter.toLowerCase())
+        data.user.repositories.nodes.filter((item: any)=>{
+          return filter.toLowerCase()===''? item : item.name.toLowerCase().includes(filter.toLowerCase())
         })
-        .map(repo=>(
+        .map((item :any)=>(
           <RepoArea
-          name={repo.name}
-          language={repo.language}
-          url={repo.html_url}
+          name={item.name}
+          language={item.languages.nodes.name}
+          url={item.url}
           />
         ))
       }
