@@ -1,20 +1,28 @@
 import styled from "styled-components";
 
-interface TopAreaProps {
+interface GeneralInfoProps {
   username: string;
   bio: string;
   name: string;
   joinedAt: string;
   pfp: string;
 }
-
-export const TopArea = ({
+/**
+ * 
+ * @param username (string) github username
+ * @param name (string) fullname of github user
+ * @param joinedAt (string) join Date to github DD MM YYYY
+ * @param bio (string) short user bio
+ * @param pfp (string) avatar image url  
+ * @returns GeneralInfo component View
+ */
+export const GeneralInfo = ({
   username,
   name,
   joinedAt,
   bio,
   pfp,
-}: TopAreaProps) => {
+}: GeneralInfoProps) => {
   return (
     <>
       <Info>
@@ -41,11 +49,12 @@ width: 100%;
 
 const Bio = styled.p`
   color: ${(props) => props.theme.colors.textNorm};
+  position:relative;
   font-size: 1.4rem;
   line-height: 192%;
   margin: 3.3rem 0 2.3rem;
   @media (min-width: 768px) {
-    margin: 2.2rem 0 3.3rem;
+    margin: 2.8rem 0 3.3rem;
     font-size: 1.6rem;
   }
 `;

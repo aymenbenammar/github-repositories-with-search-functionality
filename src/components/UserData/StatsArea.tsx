@@ -1,12 +1,18 @@
 import styled from "styled-components";
 
-interface StastsAreaProps {
+interface StatsAreaProps {
   repos: string;
   followers: string;
   following: string;
 }
-
-export const StartArea = ({ repos, followers, following }: StastsAreaProps) => {
+/**
+ * 
+ * @param (int) repos number of repos
+ * @param (int) followers number of followers
+ * @param (int) following number of following 
+ * @returns Stats Component View
+ */
+export const StatsArea = ({ repos, followers, following }: StatsAreaProps) => {
   return (
     <Container>
       <Data>

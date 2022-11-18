@@ -1,19 +1,12 @@
 import styled from "styled-components"
 import { ThemeContextProvider } from "./contexts/ThemeContext"
-import {TopArea} from "./components/TopArea";
+import {SearchComponent} from "./components/SearchComponent";
 import { useState } from "react";
 import { UserProps } from "./types/user";
 import { Index } from "./components/UserData/Index";
 import  {ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from } from '@apollo/client'
-import { onError} from '@apollo/client/link/error'
  
-// const errorLink= onError({graphqlErrors, networkError})=>{
 
-// }
-// const link =from({
-//   errorLink, 
-//   new HttpLink({uri:""})
-// })
 const client = new ApolloClient ({
   cache: new InMemoryCache(),
   uri :'https://api.github.com/graphql',
@@ -31,7 +24,7 @@ function App() {
     <ThemeContextProvider>
       
         <Container>
-          <TopArea setUser={setUserData} />
+          <SearchComponent setUser={setUserData} />
           {user && <Index user={user} />}
         </Container>
       

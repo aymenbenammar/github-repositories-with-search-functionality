@@ -5,7 +5,13 @@ interface RepoAreaProps {
   language: string;
   url: string;
 }
-
+/**
+ * 
+ * @param name (string) repo name
+ * @param language (string) repo main language
+ * @param url (string) repo url
+ * @returns RepoArea component view
+ */
 export const RepoArea = ({ name, language,url }: RepoAreaProps) => {
   return (
     <Container>

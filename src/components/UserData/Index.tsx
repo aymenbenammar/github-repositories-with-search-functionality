@@ -1,28 +1,35 @@
 import styled from "styled-components";
-import { TopArea } from "./TopArea";
+import { GeneralInfo } from "./GeneralInfo";
 import LinksArea from "./LinksArea";
-import { StartArea } from "./StartArea";
+import { StatsArea } from "./StatsArea";
 import { UserDataProps } from "../../types/user";
-import { useEffect, useState } from "react";
-import axios from 'axios'
+import { useState } from "react";
 import { RepoArea } from "./RepoArea";
 import {useQuery} from "@apollo/client"
-import {queryUser , queryRepos} from "../../graphql/queries"
+import { queryRepos} from "../../graphql/queries"
+import { AUTHORIZATION_TOKEN,REPOSTORIES_PRIVACY, REPOSTORIES_FIRST, LANGUAGE_FIRST } from "../../utils/global.env";
 
 
+/**
+ * This component renders the User Data (profile and repositories)
+ * @param user (object) user's data
+ * @returns Index Component view
+ */
 export const Index = ({ user  }: UserDataProps) => {
-  const [repos,setRepos]= useState([]);
-  const[graph,setGraph]=useState([]);
+  const [filter,setFilter]=useState('');
+  /**
+   * Query to fetch repositories
+   */
   const {loading , error , data} = useQuery(queryRepos,
    
     {variables: {
-      "first": 1,
-      "privacy": "PUBLIC",
+      "first": LANGUAGE_FIRST,
+      "privacy": REPOSTORIES_PRIVACY,
       "login": user.username,
-      "repositoriesFirst2": 100
+      "repositoriesFirst2": REPOSTORIES_FIRST
  },
    context:
-    { headers: { authorization: `Bearer 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` } 
+    { headers: { authorization: AUTHORIZATION_TOKEN } 
    }
 
 },
@@ -30,32 +37,7 @@ export const Index = ({ user  }: UserDataProps) => {
 
   
    )
-  console.log(data)
-  const [username,setUsername]=useState('')
-  const [filter,setFilter]=useState('');
 
-if(username!==user.username){
-setUsername(user.username);
-setRepos([])
-}
-useEffect(()=>{
-  //console.log(data)
-  if (repos.length==0)
- axios.get('https://api.github.com/users/'+user.username+'/repos')
-  .then(res=>{
- 
-    setRepos(res.data)
-    console.log(repos)
-  
-  })
-  .catch (err=>{
-    console.log(err)
-
-
-  })},[repos]
-
-
-)
 if (loading) return 'Loading...';
   return (
     <Container>
@@ -63,7 +45,7 @@ if (loading) return 'Loading...';
 
       <LeftSideArea>
         <Bio> <Pfp src={user.pfp} alt={user.name} />
-        <TopArea
+        <GeneralInfo
           username={user.username}
           bio={user.bio}
           name={user.name}
@@ -72,7 +54,7 @@ if (loading) return 'Loading...';
         /></Bio>
      
 
-        <StartArea
+        <StatsArea
           repos={user.repos}
           followers={user.followers}
           following={user.following}
@@ -213,27 +195,5 @@ const Input = styled.input`
   }
   &:focus {
     outline: 1px dashed #0079ff;
-  }
-`;
-
-const SubmitBtn = styled.button`
-  background: #0079ff;
-  border: none;
-  height: 100%;
-  border-radius: 1rem;
-  line-height: 2.1rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #fff;
-  cursor: pointer;
-  width: 8rem;
-  transition: all 0.3s ease-out;
-  &:hover {
-    filter: brightness(1.05);
-    box-shadow: 0px 0px 15px -3px #0079ff;
-  }
-  @media (min-width: 768px) {
-    width: 10.6rem;
-    font-size: 1.7rem;
   }
 `;

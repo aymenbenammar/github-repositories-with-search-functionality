@@ -5,14 +5,17 @@ import { TopAreaProps, UserProps } from "../types/user";
 import { joinedDate } from "../utils/formatter";
 import { queryUser } from "../graphql/queries";
 import {useQuery} from "@apollo/client"
-export const TopArea = ({ setUser }: TopAreaProps) => {
+export const SearchComponent = ({ setUser }: TopAreaProps) => {
+
   const { changeTheme, lightMode } = useContext(ThemeContext);
   const [empty, setEmpty] = useState<boolean>(false);
   const [notFound, setNotFound] = useState<boolean>(false);
   const usernameRef = useRef<HTMLInputElement>(null);
 
 
-
+/**
+ * This function handles submit of the search
+ */
   function handleSubmit() {
     if (
       usernameRef.current?.value.trim() === "" ||
@@ -26,33 +29,18 @@ export const TopArea = ({ setUser }: TopAreaProps) => {
     setEmpty(false);
     fetchUser(usernameRef.current.value);
   }
-
+/**
+ * This function will  fetch the github profile data
+ * @param username login of github account 
+ */
   async function fetchUser(username: string) {
     const response = await fetch(`https://api.github.com/users/${username}`);
     const data = await response.json();
-//   const {loading , error , data} = useQuery(queryUser,
-   
-//      {variables: {
-//     "login": username,
-//     "size": 100,
-//     "privacy": "PUBLIC"
-//   },
-//     context:
-//      { headers: { authorization: `Bearer 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` } 
-//     }
-
-// },)
-//  console.log(data)
-
-
-    // if (response.status != 200) {
-    //   setNotFound(true);
-    //   setUser(null);
-    //   return;
-    // }
 
     setNotFound(false);
-
+/**
+* binds user data 
+ */
     const user: UserProps = {
       pfp: data.avatar_url,
       name: data.name,
